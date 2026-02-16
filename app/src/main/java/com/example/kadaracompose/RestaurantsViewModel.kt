@@ -3,17 +3,18 @@ package com.example.kadaracompose
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
     private var restInterface: RestaurantsApiService
-    private lateinit var restaurantsCall: Call<List<Restaurant>>
     val state = mutableStateOf(emptyList<Restaurant>())
+
+    private val errorHandler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -42,22 +43,16 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
     }
 
     private fun getRestaurants() {
-        restaurantsCall = restInterface.getRestaurants()
-        restaurantsCall.enqueue(
-            object : Callback<List<Restaurant>> {
-                override fun onResponse(
-                    call: Call<List<Restaurant>>,
-                    response: Response<List<Restaurant>>
-                ) {
-                    response.body()?.let { restaurants ->
-                        state.value = restaurants.restoreSelections()
-                    }
-                }
+        viewModelScope.launch(errorHandler) {
+            val restaurants = getRemoteRestaurants()
+            state.value = restaurants.restoreSelections()
+        }
+    }
 
-                override fun onFailure(call: Call<List<Restaurant>>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+    private suspend fun getRemoteRestaurants(): List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            restInterface.getRestaurants()
+        }
     }
 
     private fun List<Restaurant>.restoreSelections(): List<Restaurant> {
