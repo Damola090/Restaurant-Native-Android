@@ -1,86 +1,47 @@
 package com.example.kadaracompose
 
+
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
-import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.net.ConnectException
-import java.net.UnknownHostException
 
-class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
-    private var restInterface: RestaurantsApiService
-    private var restaurantsDao = RestaurantsDb.getDaoInstance(RestaurantsApplication.getAppContext())
-    val state = mutableStateOf(emptyList<Restaurant>())
+
+class RestaurantsViewModel() : ViewModel() {
+
+    private val repository = RestaurantsRepository()
+
+    private val _state = mutableStateOf(RestaurantsScreenState(
+        restaurants = listOf(),
+        isLoading = true))
+    val state: State<RestaurantsScreenState>
+        get() = _state
 
     private val errorHandler = CoroutineExceptionHandler { _, exception ->
         exception.printStackTrace()
+        _state.value = _state.value.copy(error = exception.message, isLoading = false)
     }
 
     init {
-        val retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
-            .build()
-        restInterface = retrofit.create(RestaurantsApiService::class.java)
         getRestaurants()
     }
 
     fun toggleFavorite(id: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
             val updatedRestaurants =
-                toggleFavoriteRestaurant(id, oldValue)
-            state.value = updatedRestaurants
+                repository.toggleFavoriteRestaurant(id, oldValue)
+            _state.value = _state.value.copy(restaurants = updatedRestaurants)
         }
-    }
-    //https://restaurant-424f3-default-rtdb.firebaseio.com/restaurants.json
-    private suspend fun toggleFavoriteRestaurant(
-        id: Int,
-        oldValue: Boolean
-    ) = withContext(Dispatchers.IO) {
-        restaurantsDao.update(
-            PartialRestaurant(id = id, isFavorite = !oldValue))
-        restaurantsDao.getAll()
     }
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
-            state.value = getAllRestaurants()
+            val restaurants = repository.getAllRestaurants()
+            _state.value = _state.value.copy(
+                restaurants = restaurants,
+                isLoading = false)
         }
-    }
-
-    private suspend fun getAllRestaurants(): List<Restaurant> {
-        return withContext(Dispatchers.IO) {
-            try {
-                refreshCache()
-            } catch (e: Exception) {
-                when (e) {
-                    is UnknownHostException,
-                    is ConnectException,
-                    is HttpException -> {
-                        if (restaurantsDao.getAll().isEmpty())
-                            throw Exception(
-                                "Something went wrong. " +
-                                        "We have no data.")
-                    }
-                    else -> throw e
-                }
-            }
-            return@withContext restaurantsDao.getAll()
-        }
-    }
-
-    private suspend fun refreshCache() {
-        val remoteRestaurants = restInterface.getRestaurants()
-        val favoriteRestaurants = restaurantsDao.getAllFavorited()
-        restaurantsDao.addAll(remoteRestaurants)
-        restaurantsDao.updateAll(
-            favoriteRestaurants.map {
-                PartialRestaurant(it.id, true)
-            })
     }
 
 }
