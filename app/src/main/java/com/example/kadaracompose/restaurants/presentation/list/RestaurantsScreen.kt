@@ -32,9 +32,7 @@ import com.example.kadaracompose.restaurants.domain.Restaurant
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
 
 @Composable
-fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
-    val viewModel: RestaurantsViewModel = viewModel()
-    val state = viewModel.state.value
+fun RestaurantsScreen(state: RestaurantsScreenState, onItemClick: (id: Int) -> Unit, onFavoriteClick: (id: Int, oldValue: Boolean) -> Unit) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -47,7 +45,8 @@ fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
         ) {
             items(state.restaurants) { restaurant ->
                 RestaurantItem(restaurant,
-                    onFavoriteClick = { id, oldValue -> viewModel.toggleFavorite(id, oldValue) },
+                    onFavoriteClick = { id, oldValue ->
+                        onFavoriteClick(id, oldValue) },
                     onItemClick = { id -> onItemClick(id) })
             }
         }
@@ -115,6 +114,7 @@ fun RestaurantDetails(title: String, description: String, modifier: Modifier, ho
 @Composable
 fun DefaultPreview() {
     KadaracomposeTheme {
-        RestaurantsScreen({})
+        RestaurantsScreen(RestaurantsScreenState(listOf(), true),
+            {}, { _, _ -> })
     }
 }

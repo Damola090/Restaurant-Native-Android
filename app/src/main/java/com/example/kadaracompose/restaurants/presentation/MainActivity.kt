@@ -13,8 +13,12 @@ import androidx.navigation.NavType
 import androidx.navigation.navDeepLink
 import com.example.kadaracompose.restaurants.presentation.details.RestaurantDetailsScreen
 import com.example.kadaracompose.restaurants.presentation.list.RestaurantsScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.kadaracompose.restaurants.presentation.list.RestaurantsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +35,15 @@ private fun RestaurantsApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "restaurants") {
         composable(route = "restaurants") {
-            RestaurantsScreen { id ->
-                navController.navigate("restaurants/$id")
-            }
+           val viewModel: RestaurantsViewModel = hiltViewModel()
+            RestaurantsScreen(
+                state = viewModel.state.value,
+                onItemClick = { id ->
+                    navController.navigate("restaurants/$id")
+                },
+                onFavoriteClick = { id, oldValue ->
+                    viewModel.toggleFavorite(id, oldValue)
+                })
         }
         composable(
             route = "restaurants/{restaurant_id}",

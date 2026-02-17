@@ -7,15 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.kadaracompose.restaurants.data.RestaurantsRepository
 import com.example.kadaracompose.restaurants.domain.GetInitialRestaurantsUseCase
 import com.example.kadaracompose.restaurants.domain.ToggleRestaurantUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class RestaurantsViewModel() : ViewModel() {
-    private val getRestaurantsUseCase = GetInitialRestaurantsUseCase()
-    private val toggleRestaurantsUseCase = ToggleRestaurantUseCase()
-
+@HiltViewModel
+class RestaurantsViewModel @Inject constructor(
+    private val getRestaurantsUseCase: GetInitialRestaurantsUseCase,
+    private val toggleRestaurantsUseCase: ToggleRestaurantUseCase
+) : ViewModel() {
     private val _state = mutableStateOf(
         RestaurantsScreenState(
             restaurants = listOf(),
@@ -49,4 +52,5 @@ class RestaurantsViewModel() : ViewModel() {
                 isLoading = false)
         }
     }
+
 }
