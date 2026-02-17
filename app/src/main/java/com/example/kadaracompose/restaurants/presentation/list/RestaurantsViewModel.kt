@@ -1,20 +1,26 @@
-package com.example.kadaracompose
-
+package com.example.kadaracompose.restaurants.presentation.list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.*
+import com.example.kadaracompose.restaurants.data.RestaurantsRepository
+import com.example.kadaracompose.restaurants.domain.GetInitialRestaurantsUseCase
+import com.example.kadaracompose.restaurants.domain.ToggleRestaurantUseCase
+
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 
 
 class RestaurantsViewModel() : ViewModel() {
+    private val getRestaurantsUseCase = GetInitialRestaurantsUseCase()
+    private val toggleRestaurantsUseCase = ToggleRestaurantUseCase()
 
-    private val repository = RestaurantsRepository()
-
-    private val _state = mutableStateOf(RestaurantsScreenState(
-        restaurants = listOf(),
-        isLoading = true))
+    private val _state = mutableStateOf(
+        RestaurantsScreenState(
+            restaurants = listOf(),
+            isLoading = true)
+    )
     val state: State<RestaurantsScreenState>
         get() = _state
 
@@ -30,18 +36,17 @@ class RestaurantsViewModel() : ViewModel() {
     fun toggleFavorite(id: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
             val updatedRestaurants =
-                repository.toggleFavoriteRestaurant(id, oldValue)
+                toggleRestaurantsUseCase(id, oldValue)
             _state.value = _state.value.copy(restaurants = updatedRestaurants)
         }
     }
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
-            val restaurants = repository.getAllRestaurants()
+            val restaurants = getRestaurantsUseCase()
             _state.value = _state.value.copy(
                 restaurants = restaurants,
                 isLoading = false)
         }
     }
-
 }

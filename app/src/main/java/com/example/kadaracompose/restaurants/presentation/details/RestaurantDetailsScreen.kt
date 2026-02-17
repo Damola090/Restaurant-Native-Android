@@ -1,4 +1,4 @@
-package com.example.kadaracompose
+package com.example.kadaracompose.restaurants.presentation.details
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kadaracompose.restaurants.presentation.list.RestaurantDetails
+import com.example.kadaracompose.restaurants.presentation.list.RestaurantIcon
+
 
 @Composable
 fun RestaurantDetailsScreen() {

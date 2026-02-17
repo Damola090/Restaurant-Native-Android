@@ -1,9 +1,11 @@
-package com.example.kadaracompose
+package com.example.kadaracompose.restaurants.presentation.details
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kadaracompose.restaurants.data.remote.RestaurantsApiService
+import com.example.kadaracompose.restaurants.domain.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,7 +19,7 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
     init {
         val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
+            .baseUrl("https://restaurants-db-default-rtdb.firebaseio.com/")
             .build()
         restInterface = retrofit.create(RestaurantsApiService::class.java)
 
@@ -31,7 +33,9 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
     private suspend fun getRemoteRestaurant(id: Int): Restaurant {
         return withContext(Dispatchers.IO) {
             val response =  restInterface.getRestaurant(id)
-            return@withContext response.values.first()
+            return@withContext response.values.first().let {
+                Restaurant(id = it.id, title = it.title, description = it.description)
+            }
         }
     }
 }

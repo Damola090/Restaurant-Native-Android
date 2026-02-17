@@ -1,4 +1,7 @@
-package com.example.kadaracompose
+package com.example.kadaracompose.restaurants.presentation.list
+
+import com.example.kadaracompose.restaurants.domain.Restaurant
+
 
 data class RestaurantsScreenState(
     val restaurants: List<Restaurant>,

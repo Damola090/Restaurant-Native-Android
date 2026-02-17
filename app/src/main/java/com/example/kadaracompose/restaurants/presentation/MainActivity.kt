@@ -1,4 +1,4 @@
-package com.example.kadaracompose
+package com.example.kadaracompose.restaurants.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,6 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import androidx.navigation.navDeepLink
+import com.example.kadaracompose.restaurants.presentation.details.RestaurantDetailsScreen
+import com.example.kadaracompose.restaurants.presentation.list.RestaurantsScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

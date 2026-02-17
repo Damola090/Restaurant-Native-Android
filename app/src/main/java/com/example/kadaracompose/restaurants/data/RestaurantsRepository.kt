@@ -1,5 +1,12 @@
-package com.example.kadaracompose
+package com.example.kadaracompose.restaurants.data
 
+
+import com.example.kadaracompose.RestaurantsApplication
+import com.example.kadaracompose.restaurants.data.local.LocalRestaurant
+import com.example.kadaracompose.restaurants.data.local.PartialLocalRestaurant
+import com.example.kadaracompose.restaurants.data.local.RestaurantsDb
+import com.example.kadaracompose.restaurants.data.remote.RestaurantsApiService
+import com.example.kadaracompose.restaurants.domain.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -7,6 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.ConnectException
 import java.net.UnknownHostException
+
 
 class RestaurantsRepository {
     private var restInterface: RestaurantsApiService =
@@ -21,15 +29,22 @@ class RestaurantsRepository {
 
     suspend fun toggleFavoriteRestaurant(
         id: Int,
-        oldValue: Boolean
+        value: Boolean
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
-            PartialRestaurant(id = id, isFavorite = !oldValue))
-        restaurantsDao.getAll()
+            PartialLocalRestaurant(id = id, isFavorite = value)
+        )
     }
 
+    suspend fun getRestaurants() : List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            return@withContext restaurantsDao.getAll().map {
+                Restaurant(it.id, it.title, it.description, it.isFavorite)
+            }
+        }
+    }
 
-    suspend fun getAllRestaurants(): List<Restaurant> {
+    suspend fun loadRestaurants() {
         return withContext(Dispatchers.IO) {
             try {
                 refreshCache()
@@ -46,17 +61,18 @@ class RestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext restaurantsDao.getAll()
         }
     }
 
     private suspend fun refreshCache() {
         val remoteRestaurants = restInterface.getRestaurants()
         val favoriteRestaurants = restaurantsDao.getAllFavorited()
-        restaurantsDao.addAll(remoteRestaurants)
+        restaurantsDao.addAll(remoteRestaurants.map {
+            LocalRestaurant(it.id, it.title, it.description, false)
+        })
         restaurantsDao.updateAll(
             favoriteRestaurants.map {
-                PartialRestaurant(it.id, true)
+                PartialLocalRestaurant(id = it.id, isFavorite = true)
             })
     }
 }
