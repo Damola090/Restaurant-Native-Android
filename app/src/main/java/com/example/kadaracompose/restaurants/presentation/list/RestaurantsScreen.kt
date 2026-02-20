@@ -1,5 +1,6 @@
 package com.example.kadaracompose.restaurants.presentation.list
 
+import com.example.kadaracompose.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,10 @@ import com.example.kadaracompose.restaurants.presentation.Description
 
 
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
+
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 
 
 @Composable
@@ -80,6 +85,14 @@ fun RestaurantItem(item: Restaurant, onFavoriteClick: (id: Int, oldValue: Boolea
         modifier = Modifier.padding(8.dp)
             .clickable { onItemClick(item.id) }
     ) {
+        Column() {
+            Box(Modifier.fillMaxSize()) {
+                Image(
+                    painter = painterResource(id = R.drawable.wine_glass),
+                    contentDescription = "My image",
+//                    contentScale = ContentScale.Crop
+                )
+            }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
@@ -89,6 +102,7 @@ fun RestaurantItem(item: Restaurant, onFavoriteClick: (id: Int, oldValue: Boolea
             RestaurantIcon(icon, Modifier.weight(0.15f)) {
                 onFavoriteClick(item.id,item.isFavorite)
             }
+        }
         }
     }
 }
@@ -122,11 +136,25 @@ fun RestaurantDetails(title: String, description: String, modifier: Modifier, ho
     }
 }
 
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//    KadaracomposeTheme {
+//        RestaurantsScreen(RestaurantsScreenState(listOf(), true),
+//            {}, { _, _ -> })
+//    }
+//}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     KadaracomposeTheme {
-        RestaurantsScreen(RestaurantsScreenState(listOf(), true),
-            {}, { _, _ -> })
+        Box(Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.wine_glass),
+                contentDescription = "My image",
+//                contentScale = ContentScale.Crop
+            )
+        }
     }
 }
