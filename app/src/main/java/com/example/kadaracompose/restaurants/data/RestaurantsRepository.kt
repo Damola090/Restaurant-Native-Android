@@ -2,12 +2,14 @@ package com.example.kadaracompose.restaurants.data
 
 
 import com.example.kadaracompose.RestaurantsApplication
+import com.example.kadaracompose.restaurants.data.di.IoDispatcher
 import com.example.kadaracompose.restaurants.data.local.LocalRestaurant
 import com.example.kadaracompose.restaurants.data.local.PartialLocalRestaurant
 import com.example.kadaracompose.restaurants.data.local.RestaurantsDao
 import com.example.kadaracompose.restaurants.data.local.RestaurantsDb
 import com.example.kadaracompose.restaurants.data.remote.RestaurantsApiService
 import com.example.kadaracompose.restaurants.domain.Restaurant
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -21,19 +23,20 @@ import javax.inject.Singleton
 @Singleton
 class RestaurantsRepository @Inject constructor(
     private val restInterface: RestaurantsApiService,
-    private val restaurantsDao: RestaurantsDao
+    private val restaurantsDao: RestaurantsDao,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
     suspend fun toggleFavoriteRestaurant(
         id: Int,
         value: Boolean
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(dispatcher) {
         restaurantsDao.update(
             PartialLocalRestaurant(id = id, isFavorite = value)
         )
     }
 
     suspend fun getRestaurants() : List<Restaurant> {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcher) {
             return@withContext restaurantsDao.getAll().map {
                 Restaurant(it.id, it.title, it.description, it.isFavorite)
             }
@@ -41,7 +44,7 @@ class RestaurantsRepository @Inject constructor(
     }
 
     suspend fun loadRestaurants() {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcher) {
             try {
                 refreshCache()
             } catch (e: Exception) {

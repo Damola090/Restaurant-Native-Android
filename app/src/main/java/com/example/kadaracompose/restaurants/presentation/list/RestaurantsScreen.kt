@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -23,13 +28,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kadaracompose.restaurants.domain.Restaurant
+import com.example.kadaracompose.restaurants.presentation.Description
 
 
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
+
 
 @Composable
 fun RestaurantsScreen(state: RestaurantsScreenState, onItemClick: (id: Int) -> Unit, onFavoriteClick: (id: Int, oldValue: Boolean) -> Unit) {
@@ -37,7 +46,8 @@ fun RestaurantsScreen(state: RestaurantsScreenState, onItemClick: (id: Int) -> U
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ){
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
                 vertical = 8.dp,
                 horizontal = 8.dp
@@ -51,7 +61,9 @@ fun RestaurantsScreen(state: RestaurantsScreenState, onItemClick: (id: Int) -> U
             }
         }
         if(state.isLoading)
-            CircularProgressIndicator()
+            CircularProgressIndicator(Modifier.semantics {
+                this.contentDescription = Description.RESTAURANTS_LOADING
+            })
         if(state.error != null)
             Text(state.error)
     }
