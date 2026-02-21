@@ -76,4 +76,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

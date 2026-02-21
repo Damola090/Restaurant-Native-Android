@@ -1,6 +1,7 @@
 package com.example.kadaracompose.restaurants.data
 
 
+import android.util.Log
 import com.example.kadaracompose.RestaurantsApplication
 import com.example.kadaracompose.restaurants.data.di.IoDispatcher
 import com.example.kadaracompose.restaurants.data.local.LocalRestaurant
@@ -38,7 +39,7 @@ class RestaurantsRepository @Inject constructor(
     suspend fun getRestaurants() : List<Restaurant> {
         return withContext(dispatcher) {
             return@withContext restaurantsDao.getAll().map {
-                Restaurant(it.id, it.title, it.description, it.isFavorite)
+                Restaurant(it.id, it.title, it.image, it.description, it.isFavorite)
             }
         }
     }
@@ -65,9 +66,10 @@ class RestaurantsRepository @Inject constructor(
 
     private suspend fun refreshCache() {
         val remoteRestaurants = restInterface.getRestaurants()
+        Log.d("TAG", "$remoteRestaurants")
         val favoriteRestaurants = restaurantsDao.getAllFavorited()
         restaurantsDao.addAll(remoteRestaurants.map {
-            LocalRestaurant(it.id, it.title, it.description, false)
+            LocalRestaurant(it.id, it.title, it.description, it.image, false)
         })
         restaurantsDao.updateAll(
             favoriteRestaurants.map {

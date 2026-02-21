@@ -1,6 +1,7 @@
 package com.example.kadaracompose.restaurants.presentation.list
 
 import com.example.kadaracompose.R
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -8,14 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -33,17 +31,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.example.kadaracompose.restaurants.domain.Restaurant
 import com.example.kadaracompose.restaurants.presentation.Description
-
-
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
-
-import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale
-
+import coil.compose.AsyncImage
 
 @Composable
 fun RestaurantsScreen(state: RestaurantsScreenState, onItemClick: (id: Int) -> Unit, onFavoriteClick: (id: Int, oldValue: Boolean) -> Unit) {
@@ -87,9 +80,9 @@ fun RestaurantItem(item: Restaurant, onFavoriteClick: (id: Int, oldValue: Boolea
     ) {
         Column() {
             Box(Modifier.fillMaxSize()) {
-                Image(
-                    painter = painterResource(id = R.drawable.wine_glass),
-                    contentDescription = "My image",
+                AsyncImage(
+                    model = item.image,
+                    contentDescription = "Network image",
 //                    contentScale = ContentScale.Crop
                 )
             }
@@ -125,14 +118,10 @@ fun RestaurantDetails(title: String, description: String, modifier: Modifier, ho
             text = title,
             style = MaterialTheme.typography.headlineSmall
         )
-//        CompositionLocalProvider(
-//            LocalContentAlpha provides ContentAlpha.medium
-//        ) {
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall
-            )
-//        }
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
 
@@ -153,7 +142,6 @@ fun DefaultPreview() {
             Image(
                 painter = painterResource(id = R.drawable.wine_glass),
                 contentDescription = "My image",
-//                contentScale = ContentScale.Crop
             )
         }
     }

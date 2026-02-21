@@ -38,7 +38,7 @@ object RestaurantsModule {
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurants-db-default-rtdb.firebaseio.com/")
+            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
             .build()
     }
 

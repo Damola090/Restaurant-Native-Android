@@ -13,6 +13,8 @@ data class LocalRestaurant(
     val title: String,
     @ColumnInfo(name = "r_description")
     val description: String,
+    @ColumnInfo(name = "image")
+    val image: String,
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean = false
 )

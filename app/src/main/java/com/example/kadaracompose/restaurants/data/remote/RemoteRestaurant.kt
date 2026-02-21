@@ -7,5 +7,7 @@ data class RemoteRestaurant(
     val id: Int,
     @SerializedName("r_title")
     val title: String,
+    @SerializedName("image")
+    val image: String,
     @SerializedName("r_description")
     val description: String)

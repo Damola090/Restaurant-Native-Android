@@ -19,7 +19,7 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
     init {
         val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurants-db-default-rtdb.firebaseio.com/")
+            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
             .build()
         restInterface = retrofit.create(RestaurantsApiService::class.java)
 
@@ -34,7 +34,7 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
         return withContext(Dispatchers.IO) {
             val response =  restInterface.getRestaurant(id)
             return@withContext response.values.first().let {
-                Restaurant(id = it.id, title = it.title, description = it.description)
+                Restaurant(id = it.id, title = it.title, image= it.image, description = it.description)
             }
         }
     }
