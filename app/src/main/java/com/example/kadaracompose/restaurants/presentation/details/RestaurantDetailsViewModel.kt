@@ -1,11 +1,15 @@
 package com.example.kadaracompose.restaurants.presentation.details
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kadaracompose.restaurants.data.remote.RestaurantsApiService
+import com.example.kadaracompose.restaurants.domain.CreateRestaurant
 import com.example.kadaracompose.restaurants.domain.Restaurant
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,6 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): ViewModel() {
     private var restInterface: RestaurantsApiService
     val state = mutableStateOf<Restaurant?>(null)
+
+    private val errorHandler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -38,4 +46,15 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
             }
         }
     }
+
+    fun deleteRestaurant(){
+        viewModelScope.launch(errorHandler + Dispatchers.IO) {
+            val id = stateHandle.get<Int>("restaurant_id") ?: 0
+            val restaurant = restInterface.deleteRestaurantWithId(
+                id = id,
+            )
+            Log.d("TAG", "$restaurant")
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,6 +55,29 @@ fun RestaurantDetailsScreen() {
                     Alignment.CenterHorizontally
                 )
                 Text("More info coming soon!")
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.deleteRestaurant()
+                        },
+                        modifier = Modifier
+                        .padding(top = 32.dp)
+                    ) {
+                        Text("Delete Restaurant")
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.deleteRestaurant()
+                        },
+                        modifier = Modifier
+                            .padding(top = 32.dp, start = 8.dp)
+                    ) {
+                        Text("Update Restaurant")
+                    }
+                }
             }
         }
     }
