@@ -6,6 +6,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,8 +25,8 @@ fun RestaurantCreateScreen() {
 
     val viewModel: RestaurantCreateViewModel = viewModel()
 
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+//    var name by remember { mutableStateOf("") }
+//    var description by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     val imagePickerLauncher =
@@ -34,91 +36,121 @@ fun RestaurantCreateScreen() {
             imageUri = uri
         }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    )  {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+    Scaffold(
+        topBar = {
+            SimpleHeader(
+                title = "Details",
+//                onBackClick = { navController.popBackStack() }
+                onBackClick = {}
+            )
+        }
+    ) { padding ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-
-            Text(
-                text = "Create New Restaurant",
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            // 🔹 Name Input
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Restaurant Name") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                singleLine = true
-            )
-
-            // 🔹 Description Input
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Description") },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                maxLines = 5
-            )
-
-            // 🔹 Image Preview Box
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .padding(padding),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (imageUri != null) {
-                    AsyncImage(
-                        model = imageUri,
-                        contentDescription = "Selected image",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    Text("No image selected")
+
+//            Text(
+//                text = "Create New Restaurant",
+//                style = MaterialTheme.typography.headlineMedium
+//            )
+
+                // 🔹 Name Input
+                OutlinedTextField(
+                    value = viewModel.state.value.name,
+                    onValueChange = { viewModel.onNameChange(it) },
+                    label = { Text("Restaurant Name") },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    singleLine = true
+                )
+
+                // 🔹 Description Input
+                OutlinedTextField(
+                    value = viewModel.state.value.description,
+                    onValueChange = { viewModel.onDescriptionChange(it) },
+                    label = { Text("Description") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    maxLines = 5
+                )
+
+                // 🔹 Image Preview Box
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (imageUri != null) {
+                        AsyncImage(
+                            model = imageUri,
+                            contentDescription = "Selected image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Text("No image selected")
+                    }
                 }
-            }
 
-            // 🔹 Pick Image Button
-            OutlinedButton(
-                onClick = { imagePickerLauncher.launch("image/*") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Pick Image")
-            }
+                // 🔹 Pick Image Button
+                OutlinedButton(
+                    onClick = { imagePickerLauncher.launch("image/*") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Pick Image")
+                }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            // 🔹 Submit Button
-            Button(
-                onClick = {
-                    viewModel.createRestaurant(
-                        name = name,
-                        description = description,
-                        imageUri = imageUri
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = name.isNotBlank() && description.isNotBlank()
-            ) {
-                Text("Create Restaurant")
+                // 🔹 Submit Button
+                Button(
+                    onClick = {
+                        viewModel.createRestaurant(
+                            name = viewModel.state.value.name,
+                            description = viewModel.state.value.description,
+                            imageUri = imageUri
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = viewModel.state.value.name.isNotBlank() && viewModel.state.value.description.isNotBlank()
+                ) {
+                    Text("Create Restaurant")
+                }
             }
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleHeader(
+    title: String,
+    onBackClick: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(text = title) },
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+        }
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
