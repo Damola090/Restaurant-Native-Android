@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -22,7 +23,7 @@ import com.example.kadaracompose.restaurants.presentation.list.RestaurantIcon
 
 
 @Composable
-fun RestaurantDetailsScreen() {
+fun RestaurantDetailsScreen(onUpdateClick: (id: Int) -> Unit) {
     val viewModel: RestaurantDetailsViewModel = viewModel()
     val item = viewModel.state.value
     if (item != null) {
@@ -52,7 +53,8 @@ fun RestaurantDetailsScreen() {
                     item.title,
                     item.description,
                     Modifier.padding(bottom = 32.dp),
-                    Alignment.CenterHorizontally
+                    Alignment.CenterHorizontally,
+                    TextAlign.Center
                 )
                 Text("More info coming soon!")
                 Row(
@@ -70,7 +72,7 @@ fun RestaurantDetailsScreen() {
                     }
                     Button(
                         onClick = {
-                            viewModel.deleteRestaurant()
+                            onUpdateClick(item.id)
                         },
                         modifier = Modifier
                             .padding(top = 32.dp, start = 8.dp)

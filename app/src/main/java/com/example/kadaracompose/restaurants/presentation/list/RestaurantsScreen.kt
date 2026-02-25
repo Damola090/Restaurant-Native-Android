@@ -1,9 +1,9 @@
 package com.example.kadaracompose.restaurants.presentation.list
 
-import com.example.kadaracompose.R
-
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -48,7 +49,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.contentDescription
@@ -59,7 +59,7 @@ import androidx.compose.ui.unit.dp
 import com.example.kadaracompose.restaurants.domain.Restaurant
 import com.example.kadaracompose.restaurants.presentation.Description
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 fun RestaurantsScreen(state: RestaurantsScreenState, onCreateClick: () -> Unit, onItemClick: (id: Int) -> Unit, onFavoriteClick: (id: Int, oldValue: Boolean) -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val focusRequester = FocusRequester()
+//    val focusRequester = FocusRequester()
 
     // icons to mimic drawer destinations
         val items = listOf(
@@ -220,15 +220,21 @@ fun RestaurantIcon(
 
 
 @Composable
-fun RestaurantDetails(title: String, description: String, modifier: Modifier, horizontalAlignment: Alignment.Horizontal = Alignment.Start) {
-    Column(modifier = modifier, horizontalAlignment = horizontalAlignment) {
+fun RestaurantDetails(title: String, description: String, modifier: Modifier, horizontalAlignment: Alignment.Horizontal = Alignment.Start, textAlign: TextAlign = TextAlign.Start ) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = horizontalAlignment,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = title,
             style = MaterialTheme.typography.headlineSmall
         )
         Text(
             text = description,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = textAlign,
+            modifier = Modifier.width( 250.dp).padding(top = 10.dp)
         )
     }
 }
@@ -238,9 +244,15 @@ fun RestaurantDetails(title: String, description: String, modifier: Modifier, ho
 fun DefaultPreview() {
     KadaracomposeTheme {
         Box(Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = R.drawable.wine_glass),
-                contentDescription = "My image",
+//            Image(
+//                painter = painterResource(id = R.drawable.wine_glass),
+//                contentDescription = "My image",
+//            )
+            RestaurantDetails(
+                title = "Title",
+                description = "Description",
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
             )
         }
     }

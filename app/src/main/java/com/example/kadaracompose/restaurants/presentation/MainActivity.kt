@@ -20,6 +20,8 @@ import com.example.kadaracompose.restaurants.presentation.list.RestaurantsScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kadaracompose.restaurants.presentation.create.RestaurantCreateScreen
 import com.example.kadaracompose.restaurants.presentation.list.RestaurantsViewModel
+import com.example.kadaracompose.restaurants.presentation.update.RestaurantUpdateScreen
+import com.example.kadaracompose.restaurants.presentation.update.RestaurantUpdateViewModel
 import com.example.kadaracompose.ui.theme.KadaracomposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,11 +69,19 @@ private fun RestaurantsApp() {
             }),
             deepLinks = listOf(navDeepLink { uriPattern =
                 "www.restaurantsapp.details.com/{restaurant_id}" }),
-        ) { RestaurantDetailsScreen() }
+        ) { RestaurantDetailsScreen(
+            onUpdateClick = { id ->
+                navController.navigate("restaurants/update/$id")
+            }
+        ) }
 
         composable(route = "restaurants/create") {
             val viewModel: RestaurantsViewModel = hiltViewModel()
             RestaurantCreateScreen()
+        }
+
+        composable(route = "restaurants/update/{restaurant_id}") {
+            RestaurantUpdateScreen()
         }
     }
     }

@@ -23,5 +23,4 @@ interface RestaurantsDao {
 
     @Query("SELECT * FROM restaurants WHERE is_favorite = 1")
     suspend fun getAllFavorited(): List<LocalRestaurant>
-
 }
