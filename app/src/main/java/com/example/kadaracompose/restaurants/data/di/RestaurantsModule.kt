@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -33,17 +34,25 @@ object RestaurantsModule {
         ).fallbackToDestructiveMigration().build()
     }
 
-    @Singleton
-    @Provides
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
-            .build()
-    }
+//    @Singleton
+//    @Provides
+//    fun provideRetrofit(): Retrofit {
+//        return Retrofit.Builder()
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .baseUrl("https://restaurant-424f3-default-rtdb.firebaseio.com/")
+//            .build()
+//    }
+
+//    @Provides
+//    fun provideRetrofitApi(retrofit: Retrofit): RestaurantsApiService {
+//        return retrofit.create(RestaurantsApiService::class.java)
+//    }
 
     @Provides
-    fun provideRetrofitApi(retrofit: Retrofit): RestaurantsApiService {
+    @Singleton
+    fun provideRestaurantsApiService(
+        @Named("restaurants") retrofit: Retrofit
+    ): RestaurantsApiService {
         return retrofit.create(RestaurantsApiService::class.java)
     }
 }
