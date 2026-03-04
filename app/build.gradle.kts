@@ -89,6 +89,9 @@ dependencies {
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
 
-//    Image I think
+ //    Image I think
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // DataStore - modern replacement for SharedPreferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

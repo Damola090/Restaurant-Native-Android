@@ -1,4 +1,4 @@
-package com.example.kadaracompose.one.networking.presentation
+package com.example.kadaracompose.one.localStorage.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,6 +18,7 @@ import androidx.navigation.navDeepLink
 import com.example.kadaracompose.restaurants.presentation.details.RestaurantDetailsScreen
 import com.example.kadaracompose.restaurants.presentation.list.RestaurantsScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.kadaracompose.one.localStorage.presentation.room.NotesScreen
 import com.example.kadaracompose.restaurants.presentation.create.RestaurantCreateScreen
 import com.example.kadaracompose.restaurants.presentation.list.RestaurantsViewModel
 import com.example.kadaracompose.restaurants.presentation.update.RestaurantUpdateScreen
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KadaracomposeTheme {
-                PostsScreen()
+                NotesScreen()
             }
         }
     }

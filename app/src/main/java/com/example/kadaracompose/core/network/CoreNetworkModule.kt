@@ -28,7 +28,7 @@ import javax.inject.Singleton
 object CoreNetworkModule {
 
     // ── Base URLs ────────────────────────────────────────────────────────────
-    private const val RESTAURANTS_BASE_URL = "https://your-restaurants-api.com/"
+    private const val RESTAURANTS_BASE_URL = "https://restaurant-424f3-default-rtdb.firebaseio.com/"
     private const val JSON_PLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com/"
 
     // ── Shared OkHttpClient ──────────────────────────────────────────────────
