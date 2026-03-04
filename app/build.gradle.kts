@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     id("org.jetbrains.kotlin.kapt")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -70,7 +71,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
 //  Navigation
-    implementation ("androidx.navigation:navigation-compose:2.4.2")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
 //  Room Local Database
     implementation("androidx.room:room-runtime:2.6.1")
@@ -94,4 +96,5 @@ dependencies {
 
     // DataStore - modern replacement for SharedPreferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }
