@@ -27,7 +27,9 @@ fun HomeScreen(
     onNavigateToSensors: () -> Unit,
     onNavigateToPosts: () -> Unit,
     onNavigateToNotes: () -> Unit,
-    onNavigateToPreferences: () -> Unit
+    onNavigateToPreferences: () -> Unit,
+    onNavigateToPermissions: () -> Unit,
+    onNavigateToCamera: () -> Unit,
 ) {
     val experiments = listOf(
         Experiment(
@@ -59,6 +61,18 @@ fun HomeScreen(
             description = "DataStore · Typed key-value · User settings",
             tag = "Storage",
             onClick = onNavigateToPreferences
+        ),
+        Experiment(
+            title = "Permissions — Media etc",
+            description = "Camera · Location contacts",
+            tag = "Permission",
+            onClick = onNavigateToPermissions
+        ),
+        Experiment(
+            title = "Camera — take picture",
+            description = "Camera ·Picture",
+            tag = "Camera",
+            onClick = onNavigateToCamera
         ),
     )
 

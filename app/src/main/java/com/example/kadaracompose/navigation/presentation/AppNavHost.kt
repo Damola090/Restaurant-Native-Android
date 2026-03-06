@@ -26,6 +26,9 @@ import com.example.kadaracompose.one.networking.presentation.PostsScreen
 // ── Storage imports ───────────────────────────────────────────────────────────
 import com.example.kadaracompose.one.localStorage.presentation.room.NotesScreen
 import com.example.kadaracompose.one.localStorage.presentation.datastore.PreferencesScreen
+import com.example.kadaracompose.two.camera.presentation.CameraScreen
+import com.example.kadaracompose.two.permissions.presentation.PermissionsScreen
+
 
 @Composable
 fun AppNavHost(
@@ -45,7 +48,10 @@ fun AppNavHost(
                 onNavigateToSensors     = { navController.navigate(Sensors) },
                 onNavigateToPosts       = { navController.navigate(Posts) },
                 onNavigateToNotes       = { navController.navigate(Notes) },
-                onNavigateToPreferences = { navController.navigate(Preferences) }
+                onNavigateToPreferences = { navController.navigate(Preferences) },
+                onNavigateToPermissions = { navController.navigate(Permissions) },
+                onNavigateToCamera = { navController.navigate(Camera) },
+
             )
         }
 
@@ -102,6 +108,14 @@ fun AppNavHost(
 
         composable<Preferences> {
             PreferencesScreen()
+        }
+
+        composable<Permissions> {
+            PermissionsScreen()
+        }
+
+        composable<Camera> {
+            CameraScreen()
         }
     }
 }

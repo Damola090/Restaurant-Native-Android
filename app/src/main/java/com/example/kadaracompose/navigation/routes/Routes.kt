@@ -43,3 +43,8 @@ object Notes
 
 @Serializable
 object Preferences
+
+@Serializable
+object Permissions
+
+@Serializable object Camera
