@@ -47,4 +47,10 @@ object Preferences
 @Serializable
 object Permissions
 
-@Serializable object Camera
+@Serializable
+object Camera
+
+@Serializable
+object Location
+
+

@@ -30,6 +30,7 @@ fun HomeScreen(
     onNavigateToPreferences: () -> Unit,
     onNavigateToPermissions: () -> Unit,
     onNavigateToCamera: () -> Unit,
+    onNavigateToLocation: () -> Unit,
 ) {
     val experiments = listOf(
         Experiment(
@@ -73,6 +74,12 @@ fun HomeScreen(
             description = "Camera ·Picture",
             tag = "Camera",
             onClick = onNavigateToCamera
+        ),
+        Experiment(
+            title = "Location — Location & Maps",
+            description = "Location ·Reverse Geocoding ·Live Tracking",
+            tag = "Location",
+            onClick = onNavigateToLocation
         ),
     )
 
