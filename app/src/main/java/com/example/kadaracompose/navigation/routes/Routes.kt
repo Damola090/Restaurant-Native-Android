@@ -54,3 +54,5 @@ object Camera
 object Location
 
 
+@Serializable object WorkManagerr
+

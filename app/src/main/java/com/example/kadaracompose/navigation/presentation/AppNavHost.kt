@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
+import androidx.work.WorkManager
 import com.example.kadaracompose.navigation.routes.*
 
 // ── Restaurants imports ───────────────────────────────────────────────────────
@@ -29,6 +30,7 @@ import com.example.kadaracompose.one.localStorage.presentation.datastore.Prefere
 import com.example.kadaracompose.two.camera.presentation.CameraScreen
 import com.example.kadaracompose.two.location.presentation.LocationScreen
 import com.example.kadaracompose.two.permissions.presentation.PermissionsScreen
+import com.example.kadaracompose.two.workmanager.presentation.WorkManagerScreen
 
 
 @Composable
@@ -53,6 +55,7 @@ fun AppNavHost(
                 onNavigateToPermissions = { navController.navigate(Permissions) },
                 onNavigateToCamera = { navController.navigate(Camera) },
                 onNavigateToLocation = { navController.navigate(Location) },
+                onNavigateToWorkManager = { navController.navigate(WorkManagerr)}
 
             )
         }
@@ -122,6 +125,10 @@ fun AppNavHost(
 
         composable<Location> {
             LocationScreen()
+        }
+
+        composable<WorkManagerr> {
+            WorkManagerScreen()
         }
     }
 }

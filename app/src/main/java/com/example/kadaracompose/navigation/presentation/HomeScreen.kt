@@ -31,6 +31,7 @@ fun HomeScreen(
     onNavigateToPermissions: () -> Unit,
     onNavigateToCamera: () -> Unit,
     onNavigateToLocation: () -> Unit,
+    onNavigateToWorkManager: () -> Unit,
 ) {
     val experiments = listOf(
         Experiment(
@@ -80,6 +81,12 @@ fun HomeScreen(
             description = "Location ·Reverse Geocoding ·Live Tracking",
             tag = "Location",
             onClick = onNavigateToLocation
+        ),
+        Experiment(
+            title = "Work Manager — Background Task",
+            description = "Work Manager ·Background Task ",
+            tag = "Work Manager",
+            onClick = onNavigateToWorkManager
         ),
     )
 

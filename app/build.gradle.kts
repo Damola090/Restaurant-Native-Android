@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -124,4 +125,11 @@ dependencies {
     // Mapbox
     implementation("com.mapbox.maps:android:11.3.0")
 //    implementation("com.mapbox.maps:android-style:11.3.0")
+
+    // Work - manager - 1
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    // If using Hilt:     // Work - manager - 2
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    // Work - manager - 3
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
 }
